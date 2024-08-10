@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+  django_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DJANGO_DB_HOST=mysql
+      - DJANGO_DB_PORT=3306
+      - DJANGO_DB_NAME=mydatabase
+      - DJANGO_DB_USER=root
+      - DJANGO_DB_PASSWORD=rootpassword
+    depends_on:
+      - mysql
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+  script1_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - DJANGO_DB_HOST=mysql
+      - DJANGO_DB_PORT=3306
+      - DJANGO_DB_NAME=mydatabase
+      - DJANGO_DB_USER=root
+      - DJANGO_DB_PASSWORD=rootpassword
+    command: ["python", "scripts/script1.py"]
+
+  script2_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - DJANGO_DB_HOST=mysql
+      - DJANGO_DB_PORT=3306
+      - DJANGO_DB_NAME=mydatabase
+      - DJANGO_DB_USER=root
+      - DJANGO_DB_PASSWORD=rootpassword
+    command: ["python", "scripts/script2.py"]
+
+  script3_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - DJANGO_DB_HOST=mysql
+      - DJANGO_DB_PORT=3306
+      - DJANGO_DB_NAME=mydatabase
+      - DJANGO_DB_USER=root
+      - DJANGO_DB_PASSWORD=rootpassword
+    command: ["python", "scripts/script3.py"]
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
